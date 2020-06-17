@@ -4,6 +4,26 @@ import { getPieceByCoord } from '../helpers/helpers';
 
 import Cell from './Cell.svelte';
 import { grid } from '../store/store';
+
+
+const handleDropInside = (pieceId, pos) => {
+  let toUpdate = whitePieces;
+  if (pieceId.includes('white')) {
+    toUpdate = whitePieces;
+  } else if (pieceId.includes('black')) {
+    toUpdate = blackPieces;
+  }
+
+  toUpdate.update((oldValues) => {
+    return {
+      ...oldValues,
+      [pieceId]: {
+        ...oldValues[pieceId],
+        pos,
+      }
+    }
+  });
+};
 </script>
 
 <style>
@@ -16,13 +36,14 @@ import { grid } from '../store/store';
 }
 </style>
 
-
 <div class="Board">
   {#each $grid as row}
     {#each row as cell}
       <Cell
+        onDropInside={handleDropInside}
         color={cell.color}
         column={cell.column}
+        pos={{x: cell.x, y: cell.y}}
         piece={getPieceByCoord(cell.x, cell.y, {...$blackPieces, ...$whitePieces})}
         row={cell.row} />
     {/each}

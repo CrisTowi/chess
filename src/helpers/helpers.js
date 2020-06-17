@@ -42,7 +42,10 @@ export const getPieceByCoord = (x, y, pieces) => {
   const piecesKeys = Object.keys(pieces);
   for (let i = 0; i < piecesKeys.length; i++) {
     if (pieces[piecesKeys[i]].pos.x === x && pieces[piecesKeys[i]].pos.y === y) {
-      return pieces[piecesKeys[i]];
+      return {
+        ...pieces[piecesKeys[i]],
+        id: piecesKeys[i],
+      };
     }
   }
 

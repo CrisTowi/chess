@@ -5,6 +5,17 @@ export let color;
 export let row;
 export let column;
 export let piece;
+export let pos;
+export let onDropInside;
+
+const handleDragStart = (e, id) => {
+  e.dataTransfer.setData("piece_id", id);
+};
+
+const handleDrop = (e) => {
+  const pieceId = e.dataTransfer.getData("piece_id");
+  onDropInside(pieceId, pos);
+};
 
 </script>
 <style>
@@ -61,7 +72,10 @@ export let piece;
 }
 </style>
 
-<div class={`Cell ${color === 'black' ? 'Cell--black' : ''}`}>
+<div
+  on:drop={handleDrop}
+  ondragover="return false"
+  class={`Cell ${color === 'black' ? 'Cell--black' : ''}`}>
   <div class="Marks-container">
     {#if row}
       <div class={`row-mark ${color === 'white' ? 'row-mark--black' : ''}`}>
@@ -74,7 +88,7 @@ export let piece;
       </div>
     {/if}
     {#if piece}
-      <Piece piece={piece} />
+      <Piece onDragStart={handleDragStart} piece={piece} />
     {/if}
   </div>
 </div>
