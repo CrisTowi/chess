@@ -8,16 +8,22 @@ import Board from './components/Board.svelte';
 		padding: 0px;
 	}
 
-	.Board-container {
+	.App {
 		height: 100vh;
-		width: 100vh;
-		margin-left: auto;
-		margin-right: auto;
+		width: 100vw;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.Board-container {
+		height: 100vmin;
+		width: 100vmin;
 	}
 </style>
 
-<main>
+<div class="App">
 	<div class="Board-container">
 		<Board />
 	</div>
-</main>
+</div>

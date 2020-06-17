@@ -1,4 +1,7 @@
 <script>
+import { blackPieces, whitePieces } from '../store/store';
+import { getPieceByCoord } from '../helpers/helpers';
+
 import Cell from './Cell.svelte';
 import { grid } from '../store/store';
 </script>
@@ -18,9 +21,10 @@ import { grid } from '../store/store';
   {#each $grid as row}
     {#each row as cell}
       <Cell
-        row={cell.row}
+        color={cell.color}
         column={cell.column}
-        color={cell.color} />
+        piece={getPieceByCoord(cell.x, cell.y, {...$blackPieces, ...$whitePieces})}
+        row={cell.row} />
     {/each}
   {/each}
 </div>

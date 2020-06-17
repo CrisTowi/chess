@@ -24,18 +24,27 @@ export const createGrid = () => {
       }
 
       boardCells[i].push({
-        piece: null,
-        reachable: false,
         color: colorBool ? 'white' : 'black',
-        row,
         column,
+        row,
+        x: j,
+        y: i,
       });
       colorBool = !colorBool;
     }
     colorBool = !colorBool;
   }
 
-  console.log(boardCells);
-
   return boardCells;
+}
+
+export const getPieceByCoord = (x, y, pieces) => {
+  const piecesKeys = Object.keys(pieces);
+  for (let i = 0; i < piecesKeys.length; i++) {
+    if (pieces[piecesKeys[i]].pos.x === x && pieces[piecesKeys[i]].pos.y === y) {
+      return pieces[piecesKeys[i]];
+    }
+  }
+
+  return null;
 }

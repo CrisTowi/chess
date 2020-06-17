@@ -1,12 +1,17 @@
 <script>
+import Piece from './Piece.svelte';
+
 export let color;
 export let row;
 export let column;
+export let piece;
+
 </script>
 <style>
 .Cell {
   background: #D6C5C5;
   border-collapse: collapse;
+  cursor: grab;
 }
 
 .Cell--black {
@@ -43,6 +48,17 @@ export let column;
 .column-mark--black {
   color: #957656;
 }
+
+@media screen and (max-width: 450px) {
+  .row-mark {
+    font-size: 12px;
+  }
+
+  .column-mark {
+    font-size: 12px;
+  }
+
+}
 </style>
 
 <div class={`Cell ${color === 'black' ? 'Cell--black' : ''}`}>
@@ -56,6 +72,9 @@ export let column;
       <div class={`column-mark ${color === 'white' ? 'column-mark--black' : ''}`}>
         {column}
       </div>
+    {/if}
+    {#if piece}
+      <Piece piece={piece} />
     {/if}
   </div>
 </div>
