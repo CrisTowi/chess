@@ -1,13 +1,36 @@
 <script>
 import { pieces, grid } from '../store/store';
 import { getPieceByCoord } from '../helpers/helpers';
-import { inValidMoves, getValidPawnMoves } from '../helpers/validMoves';
+import {
+  inValidMoves,
+  getValidPawnMoves,
+  getValidRookMoves,
+  getValidBishopMoves,
+  getValidQueenMoves,
+} from '../helpers/validMoves';
 
 import Cell from './Cell.svelte';
 
 const handleDragStart = (pieceId) => {
   const piece = JSON.parse(JSON.stringify($pieces[pieceId]));
-  const validMoves = getValidPawnMoves(piece, $grid);
+  let validMoves = [];
+
+  switch(piece.name) {
+    case 'pawn':
+      validMoves = getValidPawnMoves(piece, $grid);
+      break;
+    case 'rook':
+      validMoves = getValidRookMoves(piece, $grid);
+      break;
+    case 'bishop':
+      validMoves = getValidBishopMoves(piece, $grid);
+      break;
+    case 'queen':
+      validMoves = getValidQueenMoves(piece, $grid);
+      break;
+    default:
+      validMoves = [];
+  }
 
   grid.update((oldGrid) => {
     validMoves.forEach((move) => {
@@ -20,7 +43,25 @@ const handleDragStart = (pieceId) => {
 
 const handleDropInside = (pieceId, pos) => {
   const piece = JSON.parse(JSON.stringify($pieces[pieceId]));
-  const validMoves = getValidPawnMoves(piece, $grid);
+  let validMoves = [];
+
+  switch(piece.name) {
+    case 'pawn':
+      validMoves = getValidPawnMoves(piece, $grid);
+      break;
+    case 'rook':
+      validMoves = getValidRookMoves(piece, $grid);
+      break;
+    case 'bishop':
+      validMoves = getValidBishopMoves(piece, $grid);
+      break;
+    case 'queen':
+      validMoves = getValidQueenMoves(piece, $grid);
+      break;
+    default:
+      validMoves = [];
+  }
+
 
   if (!inValidMoves(validMoves, pos)) {
     return;
