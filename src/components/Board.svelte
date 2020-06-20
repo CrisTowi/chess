@@ -32,6 +32,7 @@ const handleDropInside = (pieceId, pos) => {
       [pieceId]: {
         ...oldPieces[pieceId],
         pos,
+        moved: true,
       }
     }
   });
@@ -72,6 +73,7 @@ const handleDropInside = (pieceId, pos) => {
         column={cell.column}
         pos={{x: cell.x, y: cell.y}}
         piece={cell.piece}
+        reachable={cell.reachable}
         row={cell.row} />
     {/each}
   {/each}

@@ -7,6 +7,7 @@ export let onDragStart;
 export let onDropInside;
 export let piece;
 export let pos;
+export let reachable;
 export let row;
 
 const handleDragStart = (e, id) => {
@@ -80,7 +81,7 @@ const handleDrop = (e) => {
 <div
   on:drop={handleDrop}
   ondragover="return false"
-  class={`Cell ${color === 'black' ? 'Cell--black' : ''}`}>
+  class={`Cell ${color === 'black' ? 'Cell--black' : ''} ${reachable ? 'Cell--reachable' : ''}`}>
   <div class="Marks-container">
     {#if row}
       <div class={`row-mark ${color === 'white' ? 'row-mark--black' : ''}`}>
