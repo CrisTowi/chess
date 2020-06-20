@@ -38,6 +38,20 @@ export const createGrid = () => {
   return boardCells;
 }
 
+export const fillGridWithPieces = (grid, pieces) => {
+  const piecesKeys = Object.keys(pieces);
+
+  piecesKeys.forEach((key) => {
+    const piece = pieces[key];
+    grid[piece.pos.y][piece.pos.x].piece = {
+      ...piece,
+      id: key,
+    };
+  });
+
+  return grid;
+}
+
 export const getPieceByCoord = (x, y, pieces) => {
   const piecesKeys = Object.keys(pieces);
   for (let i = 0; i < piecesKeys.length; i++) {

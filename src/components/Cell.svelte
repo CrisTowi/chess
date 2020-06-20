@@ -2,13 +2,15 @@
 import Piece from './Piece.svelte';
 
 export let color;
-export let row;
 export let column;
+export let onDragStart;
+export let onDropInside;
 export let piece;
 export let pos;
-export let onDropInside;
+export let row;
 
 const handleDragStart = (e, id) => {
+  onDragStart(id);
   e.dataTransfer.setData("piece_id", id);
 };
 
@@ -27,6 +29,10 @@ const handleDrop = (e) => {
 
 .Cell--black {
   background: #957656;
+}
+
+.Cell--reachable {
+  background: yellow;
 }
 
 .Marks-container {
@@ -68,7 +74,6 @@ const handleDrop = (e) => {
   .column-mark {
     font-size: 12px;
   }
-
 }
 </style>
 

@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import { createGrid } from '../helpers/helpers';
+import { createGrid, fillGridWithPieces } from '../helpers/helpers';
 
-const BLACK_PIECES = {
+const PIECES = {
   'bishop_1_black': { pos: { y: 0, x: 2 }, moved: false, color: 'black', name: 'bishop', alive: true },
   'bishop_2_black': { pos: { y: 0, x: 5 }, moved: false, color: 'black', name: 'bishop', alive: true },
   'king_black': { pos: { y: 0, x: 4 }, moved: false, color: 'black', name: 'king', alive: true },
@@ -18,9 +18,6 @@ const BLACK_PIECES = {
   'queen_black': { pos: { y: 0, x: 3 }, moved: false, color: 'black', name: 'queen', alive: true },
   'rook_1_black': { pos: { y: 0, x: 0 }, moved: false, color: 'black', name: 'rook', alive: true },
   'rook_2_black': { pos: { y: 0, x: 7 }, moved: false, color: 'black', name: 'rook', alive: true },
-};
-
-const WHITE_PIECES = {
   'bishop_1_white': { pos: { y: 7, x: 2 }, moved: false, color: 'white', name: 'bishop', alive: true },
   'bishop_2_white': { pos: { y: 7, x: 5 }, moved: false, color: 'white', name: 'bishop', alive: true },
   'king_white': { pos: { y: 7, x: 4 }, moved: false, color: 'white', name: 'king', alive: true },
@@ -39,6 +36,8 @@ const WHITE_PIECES = {
   'rook_2_white': { pos: { y: 7, x: 7 }, moved: false, color: 'white', name: 'rook', alive: true },
 };
 
-export const grid = writable(createGrid());
-export const blackPieces = writable(BLACK_PIECES);
-export const whitePieces = writable(WHITE_PIECES);
+const emptyGrid = createGrid();
+
+export const grid = writable(fillGridWithPieces(emptyGrid, PIECES));
+export const pieces = writable(PIECES);
+

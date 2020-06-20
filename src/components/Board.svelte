@@ -1,27 +1,53 @@
 <script>
-import { blackPieces, whitePieces } from '../store/store';
+import { pieces, grid } from '../store/store';
 import { getPieceByCoord } from '../helpers/helpers';
+import { inValidMoves, getValidPawnMoves } from '../helpers/validMoves';
 
 import Cell from './Cell.svelte';
-import { grid } from '../store/store';
 
+const handleDragStart = (pieceId) => {
+  const piece = JSON.parse(JSON.stringify($pieces[pieceId]));
+  const validMoves = getValidPawnMoves(piece, $grid);
+
+  grid.update((oldGrid) => {
+    validMoves.forEach((move) => {
+      oldGrid[move.y][move.x].reachable = true;
+    });
+
+    return oldGrid;
+  });
+}
 
 const handleDropInside = (pieceId, pos) => {
-  let toUpdate = whitePieces;
-  if (pieceId.includes('white')) {
-    toUpdate = whitePieces;
-  } else if (pieceId.includes('black')) {
-    toUpdate = blackPieces;
+  const piece = JSON.parse(JSON.stringify($pieces[pieceId]));
+  const validMoves = getValidPawnMoves(piece, $grid);
+
+  if (!inValidMoves(validMoves, pos)) {
+    return;
   }
 
-  toUpdate.update((oldValues) => {
+  pieces.update((oldPieces) => {
     return {
-      ...oldValues,
+      ...oldPieces,
       [pieceId]: {
-        ...oldValues[pieceId],
+        ...oldPieces[pieceId],
         pos,
       }
     }
+  });
+
+  grid.update((oldGrid) => {
+    validMoves.forEach((move) => {
+      oldGrid[move.y][move.x].reachable = false;
+    });
+    oldGrid[piece.pos.y][piece.pos.x].piece = null;
+    oldGrid[pos.y][pos.x].piece = {
+      ...piece,
+      pos,
+      id: pieceId
+    };
+
+    return oldGrid;
   });
 };
 </script>
@@ -41,10 +67,11 @@ const handleDropInside = (pieceId, pos) => {
     {#each row as cell}
       <Cell
         onDropInside={handleDropInside}
+        onDragStart={handleDragStart}
         color={cell.color}
         column={cell.column}
         pos={{x: cell.x, y: cell.y}}
-        piece={getPieceByCoord(cell.x, cell.y, {...$blackPieces, ...$whitePieces})}
+        piece={cell.piece}
         row={cell.row} />
     {/each}
   {/each}

@@ -46,7 +46,7 @@ export let onDragStart;
 
 </style>
 
-<div draggable={true} on:dragstart={(e) => onDragStart(e, piece.id)} data-piece={piece.id} class="Piece">
+<div draggable={true} on:dragstart={(e) => onDragStart(e, piece.id)} class="Piece">
   <div class="Piece-container">
     {#if piece.name === 'king'}
       <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-king`}></i>
