@@ -7,6 +7,8 @@ import {
   getValidRookMoves,
   getValidBishopMoves,
   getValidQueenMoves,
+  getValidKingMoves,
+  getValidKnightMoves,
 } from '../helpers/validMoves';
 
 import Cell from './Cell.svelte';
@@ -27,6 +29,12 @@ const handleDragStart = (pieceId) => {
       break;
     case 'queen':
       validMoves = getValidQueenMoves(piece, $grid);
+      break;
+    case 'king':
+      validMoves = getValidKingMoves(piece, $grid);
+      break;
+    case 'knight':
+      validMoves = getValidKnightMoves(piece, $grid);
       break;
     default:
       validMoves = [];
@@ -57,6 +65,12 @@ const handleDropInside = (pieceId, pos) => {
       break;
     case 'queen':
       validMoves = getValidQueenMoves(piece, $grid);
+      break;
+    case 'king':
+      validMoves = getValidKingMoves(piece, $grid);
+      break;
+    case 'knight':
+      validMoves = getValidKnightMoves(piece, $grid);
       break;
     default:
       validMoves = [];

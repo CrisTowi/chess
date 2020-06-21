@@ -1,3 +1,7 @@
+export const insideBounds = (pos) => {
+  return pos.x >= 0 && pos.x <= 7 && pos.y >= 0 && pos.y <= 7;
+};
+
 export const getValidMovesUntilLimit = (pos, color, relativePos, grid) => {
   const tempPos = Object.assign({}, pos);
   const result = [];
@@ -11,7 +15,7 @@ export const getValidMovesUntilLimit = (pos, color, relativePos, grid) => {
   tempPos.x = tempPos.x + relativePos.x;
   tempPos.y = tempPos.y + relativePos.y;
 
-  while (tempPos.x >= 0 && tempPos.x <= 7 && tempPos.y >= 0 && tempPos.y <= 7 && !grid[tempPos.y][tempPos.x].piece) {
+  while (insideBounds(tempPos) && !grid[tempPos.y][tempPos.x].piece) {
     result.push({ x: tempPos.x, y: tempPos.y });
     tempPos.x = tempPos.x + relativePos.x;
     tempPos.y = tempPos.y + relativePos.y;
@@ -112,3 +116,56 @@ export const getValidQueenMoves = (piece, grid) => {
     ...rightValidMoves,
   ];
 };
+
+export const getValidKingMoves = (piece, grid) => {
+  let otherColor = 'black';
+
+  if (piece.color === 'black') {
+    otherColor = 'white';
+  }
+
+  const result = [
+    { x: piece.pos.x + 0, y: piece.pos.y + 1 },
+    { x: piece.pos.x + 0, y: piece.pos.y - 1 },
+    { x: piece.pos.x + -1, y: piece.pos.y + 1 },
+    { x: piece.pos.x + -1, y: piece.pos.y + 0 },
+    { x: piece.pos.x + -1, y: piece.pos.y + -1 },
+    { x: piece.pos.x + 1, y: piece.pos.y + 1 },
+    { x: piece.pos.x + 1, y: piece.pos.y + 0 },
+    { x: piece.pos.x + 1, y: piece.pos.y - 1 },
+  ];
+
+  return result.filter((pos) => {
+    return (
+      insideBounds(pos) && !grid[pos.y][pos.x].piece
+      || insideBounds(pos) && grid[pos.y][pos.x].piece && grid[pos.y][pos.x].piece.color === otherColor
+    );
+  });
+}
+
+export const getValidKnightMoves = (piece, grid) => {
+  let otherColor = 'black';
+
+  if (piece.color === 'black') {
+    otherColor = 'white';
+  }
+
+  const result = [
+    { x: piece.pos.x + 2, y: piece.pos.y + 1 },
+    { x: piece.pos.x + 2, y: piece.pos.y - 1 },
+    { x: piece.pos.x + -2, y: piece.pos.y + 1 },
+    { x: piece.pos.x + -2, y: piece.pos.y - 1 },
+    { x: piece.pos.x + -1, y: piece.pos.y - 2 },
+    { x: piece.pos.x + 1, y: piece.pos.y - 2 },
+    { x: piece.pos.x + -1, y: piece.pos.y + 2 },
+    { x: piece.pos.x + 1, y: piece.pos.y + 2 },
+  ];
+
+  return result.filter((pos) => {
+    return (
+      insideBounds(pos) && !grid[pos.y][pos.x].piece
+      || insideBounds(pos) && grid[pos.y][pos.x].piece && grid[pos.y][pos.x].piece.color === otherColor
+    );
+  });
+}
+
