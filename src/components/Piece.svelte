@@ -19,7 +19,7 @@ export let onDragStart;
 }
 
 .piece-icon {
-  font-size: 70px;
+  font-size: 20px;
 }
 
 .piece-icon--white {
@@ -49,22 +49,22 @@ export let onDragStart;
 <div draggable={true} on:dragstart={(e) => onDragStart(e, piece.id)} class="Piece">
   <div class="Piece-container">
     {#if piece.name === 'king'}
-      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-king`}></i>
+      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-king`}>{piece.name}</i>
     {/if}
     {#if piece.name === 'queen'}
-      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-queen`}></i>
+      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-queen`}>{piece.name}</i>
     {/if}
     {#if piece.name === 'rook'}
-      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-rook`}></i>
+      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-rook`}>{piece.name}</i>
     {/if}
     {#if piece.name === 'pawn'}
-      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-pawn`}></i>
+      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-pawn`}>{piece.name}</i>
     {/if}
     {#if piece.name === 'knight'}
-      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-knight`}></i>
+      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-knight`}>{piece.name}</i>
     {/if}
     {#if piece.name === 'bishop'}
-      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-bishop`}></i>
+      <i class={`piece-icon piece-icon--${piece.color} fas fa-chess-bishop`}>{piece.name}</i>
     {/if}
   </div>
 </div>

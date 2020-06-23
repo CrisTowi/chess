@@ -54,12 +54,16 @@ export const getValidPawnMoves = (piece, grid) => {
     otherColor = 'white';
   }
 
-  result.push({ y: piece.pos.y + moveDirection, x: piece.pos.x });
+  // Vertical moves
+  if (!grid[piece.pos.y + moveDirection][piece.pos.x].piece) {
+    result.push({ y: piece.pos.y + moveDirection, x: piece.pos.x });
+  }
 
-  if (!piece.moved) {
+  if (!piece.moved && !grid[piece.pos.y + (moveDirection * 2)][piece.pos.x].piece) {
     result.push({ y: piece.pos.y + (moveDirection * 2), x: piece.pos.x });
   }
 
+  // Diagonal moves
   if (piece.pos.x !== 0
     && grid[piece.pos.y + moveDirection][piece.pos.x - 1].piece
     && grid[piece.pos.y + moveDirection][piece.pos.x - 1].piece.color === otherColor
