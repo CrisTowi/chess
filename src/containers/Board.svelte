@@ -11,7 +11,7 @@ import {
   getValidKnightMoves,
 } from '../helpers/validMoves';
 
-import Cell from './Cell.svelte';
+import Cell from '../components/Cell.svelte';
 
 const handleDragStart = (pieceId) => {
   const piece = JSON.parse(JSON.stringify($pieces[pieceId]));
@@ -53,6 +53,7 @@ const handleDropInside = (pieceId, pos) => {
   const piece = Object.assign({}, $pieces[pieceId]);
   let otherColor = 'black';
   let validMoves = [];
+  let eated = null;
 
   if (piece.color === 'black') {
     otherColor = 'white';
@@ -86,15 +87,29 @@ const handleDropInside = (pieceId, pos) => {
     return;
   }
 
+  if ($grid[pos.y][pos.x].piece) {
+    eated = $grid[pos.y][pos.x].piece.id;
+  }
+
   pieces.update((oldPieces) => {
-    return {
+    const newObject = {
       ...oldPieces,
       [pieceId]: {
         ...oldPieces[pieceId],
         pos,
         moved: true,
       }
+    };
+
+    if (eated) {
+      newObject[eated] = {
+        ...newObject[eated],
+        alive: false,
+        pos: null,
+      }
     }
+
+    return newObject; 
   });
 
   grid.update((oldGrid) => {
