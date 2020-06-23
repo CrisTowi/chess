@@ -1,4 +1,5 @@
 <script>
+import { turn } from '../store/store';
 import Piece from './Piece.svelte';
 
 export let color;
@@ -11,6 +12,11 @@ export let reachable;
 export let row;
 
 const handleDragStart = (e, id) => {
+  if (!id.includes($turn)) {
+    e.preventDefault();
+    return;
+  }
+
   onDragStart(id);
   e.dataTransfer.setData("piece_id", id);
 };

@@ -1,5 +1,5 @@
 <script>
-import { pieces, grid } from '../store/store';
+import { pieces, grid, turn } from '../store/store';
 import { getPieceByCoord } from '../helpers/helpers';
 import {
   inValidMoves,
@@ -50,8 +50,13 @@ const handleDragStart = (pieceId) => {
 }
 
 const handleDropInside = (pieceId, pos) => {
-  const piece = JSON.parse(JSON.stringify($pieces[pieceId]));
+  const piece = Object.assign({}, $pieces[pieceId]);
+  let otherColor = 'black';
   let validMoves = [];
+
+  if (piece.color === 'black') {
+    otherColor = 'white';
+  }
 
   switch(piece.name) {
     case 'pawn':
@@ -105,6 +110,8 @@ const handleDropInside = (pieceId, pos) => {
 
     return oldGrid;
   });
+
+  turn.update(() => otherColor);
 };
 </script>
 

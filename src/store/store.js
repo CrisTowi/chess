@@ -40,4 +40,5 @@ const emptyGrid = createGrid();
 
 export const grid = writable(fillGridWithPieces(emptyGrid, PIECES));
 export const pieces = writable(PIECES);
+export const turn = writable('white');
 
