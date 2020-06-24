@@ -41,4 +41,7 @@ const emptyGrid = createGrid();
 export const grid = writable(fillGridWithPieces(emptyGrid, PIECES));
 export const pieces = writable(PIECES);
 export const turn = writable('white');
-
+export const whiteRemaining = writable(300000);
+export const blackRemaining = writable(300000);
+export const startTime = writable(new Date());
+export const timerInterval = writable(null);

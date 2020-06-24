@@ -1,5 +1,5 @@
 <script>
-import { pieces, grid, turn } from '../store/store';
+import { pieces, grid, turn, startTime, whiteRemaining, blackRemaining } from '../store/store';
 import { getPieceByCoord } from '../helpers/helpers';
 import {
   inValidMoves,

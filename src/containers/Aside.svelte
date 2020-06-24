@@ -1,11 +1,14 @@
 <script>
 import PieceIcon from '../components/PieceIcon.svelte';
-import { pieces, grid, turn } from '../store/store';
+import { pieces, whiteRemaining, blackRemaining } from '../store/store';
+import { getTimeObjFromMs } from '../helpers/helpers';
 
 let blackEatedPieces = [];
 let whiteEatedPieces = [];
+let blackRemainObj = getTimeObjFromMs($blackRemaining);
+let whiteRemainObj = getTimeObjFromMs($whiteRemaining);
 
-pieces.subscribe((pieces) => {
+pieces.subscribe(() => {
   blackEatedPieces = Object.keys($pieces)
     .filter(key => key.includes('black') && !$pieces[key].alive)
     .map((pieceKey) => $pieces[pieceKey])
@@ -13,6 +16,15 @@ pieces.subscribe((pieces) => {
     .filter(key => key.includes('white') && !$pieces[key].alive)
     .map((pieceKey) => $pieces[pieceKey])
 });
+
+blackRemaining.subscribe(() => {
+  blackRemainObj = getTimeObjFromMs($blackRemaining);
+});
+
+whiteRemaining.subscribe(() => {
+  whiteRemainObj = getTimeObjFromMs($whiteRemaining);
+});
+
 </script>
 
 <style>
@@ -32,6 +44,35 @@ pieces.subscribe((pieces) => {
 
 .Aside-Timer {
   height: 33.33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.Aside-Timer-Title {
+  font-weight: 900;
+  font-size: 30px;
+  color: #FFFFFF;
+}
+
+.Aside-Timer-color {
+  width: 45%;
+  border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+}
+
+.Min-label {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.Sec-label {
+  font-size: 30px;
+}
+
+.Ms-label {
+  font-size: 20px;
 }
 
 .Piece-container {
@@ -49,7 +90,22 @@ pieces.subscribe((pieces) => {
     {/each}
   </div>
   <div class="Aside-Timer">
-    
+    <div class="Aside-Timer-color">
+      <p class="Aside-Timer-Title">Black</p>
+      <p>
+        <span class="Min-label">{blackRemainObj.min}</span>
+        <span class="Sec-label">{blackRemainObj.sec}</span>
+        <span class="Ms-label">{blackRemainObj.ms}</span>
+      </p>
+    </div>
+    <div class="Aside-Timer-color">
+      <p class="Aside-Timer-Title">White</p>
+      <p>
+        <span class="Min-label">{whiteRemainObj.min}</span>
+        <span class="Sec-label">{whiteRemainObj.sec}</span>
+        <span class="Ms-label">{whiteRemainObj.ms}</span>
+      </p>
+    </div>
   </div>
   <div class="Aside-Pieces">
     {#each whiteEatedPieces as piece}

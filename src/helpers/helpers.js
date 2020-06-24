@@ -65,3 +65,16 @@ export const getPieceByCoord = (x, y, pieces) => {
 
   return null;
 }
+
+export const getTimeObjFromMs = (t) => {
+  const min = Math.floor((t / 1000) / 60);
+  const rem = t - (min * 1000 * 60);
+  const sec = Math.floor(rem / 1000);
+  const ms = (rem - (sec * 1000)) / 10;
+
+  return {
+    min: min <= 9 ? `0${min}` : min,
+    sec: sec <= 9 ? `0${sec}` : sec,
+    ms: ms <= 9 ? `0${ms}` : ms,
+  };
+}

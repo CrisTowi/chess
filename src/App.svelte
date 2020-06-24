@@ -1,6 +1,28 @@
 <script>
+import { onMount } from 'svelte';
 import Board from './containers/Board.svelte';
 import Aside from './containers/Aside.svelte';
+
+import { turn, whiteRemaining, blackRemaining, startTime, timerInterval } from './store/store';
+
+turn.subscribe(() => {
+	clearInterval($timerInterval);
+
+	timerInterval.update(() => {
+		return setInterval(() => {
+			if ($turn === 'white') {
+				whiteRemaining.update((oldValue) => {
+					return oldValue - 10;
+				});
+			} else if ($turn === 'black') {
+				blackRemaining.update((oldValue) => {
+					return oldValue - 10;
+				});
+			}
+		}, 10)
+	});
+});
+
 </script>
 
 <style>
@@ -17,6 +39,7 @@ import Aside from './containers/Aside.svelte';
 		justify-content: center;
 		padding: 20px;
 		box-sizing: border-box;
+		background: #75BFA6;
 	}
 
 	.Board-container {
