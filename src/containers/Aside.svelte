@@ -91,19 +91,19 @@ whiteRemaining.subscribe(() => {
   </div>
   <div class="Aside-Timer">
     <div class="Aside-Timer-color">
-      <p class="Aside-Timer-Title">Black</p>
-      <p>
-        <span class="Min-label">{blackRemainObj.min}</span>
-        <span class="Sec-label">{blackRemainObj.sec}</span>
-        <span class="Ms-label">{blackRemainObj.ms}</span>
-      </p>
-    </div>
-    <div class="Aside-Timer-color">
       <p class="Aside-Timer-Title">White</p>
       <p>
         <span class="Min-label">{whiteRemainObj.min}</span>
         <span class="Sec-label">{whiteRemainObj.sec}</span>
         <span class="Ms-label">{whiteRemainObj.ms}</span>
+      </p>
+    </div>
+    <div class="Aside-Timer-color">
+      <p class="Aside-Timer-Title">Black</p>
+      <p>
+        <span class="Min-label">{blackRemainObj.min}</span>
+        <span class="Sec-label">{blackRemainObj.sec}</span>
+        <span class="Ms-label">{blackRemainObj.ms}</span>
       </p>
     </div>
   </div>
