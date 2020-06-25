@@ -1,3 +1,12 @@
+import {
+  getValidPawnMoves,
+  getValidRookMoves,
+  getValidBishopMoves,
+  getValidQueenMoves,
+  getValidKingMoves,
+  getValidKnightMoves,
+} from './validMoves';
+
 export const nextChar = (c) => {
   return String.fromCharCode(c.charCodeAt(0) + 1);
 }
@@ -77,4 +86,50 @@ export const getTimeObjFromMs = (t) => {
     sec: sec <= 9 ? `0${sec}` : sec,
     ms: ms <= 9 ? `0${ms}` : ms,
   };
+}
+
+export const getRivalPieces = (color, pieces) => {
+  let otherColor = 'black';
+
+  if (color === 'black') {
+    otherColor = 'white';
+  }
+
+  return Object.keys(pieces)
+    .map((piece) => pieces[piece])
+    .filter((piece) => piece.color === otherColor && piece.alive);
+}
+
+export const inJaque = (pos, color, pieces, grid) => {
+  const rivalPieces = getRivalPieces(color, pieces);
+  const isInJaque = rivalPieces.reduce((prevVal, piece) => {
+    let validMoves = [];
+
+    switch(piece.name) {
+      case 'pawn':
+        validMoves = getValidPawnMoves(piece, grid);
+        break;
+      case 'rook':
+        validMoves = getValidRookMoves(piece, grid);
+        break;
+      case 'bishop':
+        validMoves = getValidBishopMoves(piece, grid);
+        break;
+      case 'queen':
+        validMoves = getValidQueenMoves(piece, grid);
+        break;
+      case 'king':
+        validMoves = getValidKingMoves(piece, grid);
+        break;
+      case 'knight':
+        validMoves = getValidKnightMoves(piece, grid);
+        break;
+      default:
+        validMoves = [];
+    }
+
+    return !!validMoves.some(move => move.x === pos.x && move.y === pos.y) || prevVal;
+  }, false);
+
+  return isInJaque;
 }

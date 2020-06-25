@@ -1,6 +1,6 @@
 <script>
 import { pieces, grid, turn, startTime, whiteRemaining, blackRemaining } from '../store/store';
-import { getPieceByCoord } from '../helpers/helpers';
+import { getPieceByCoord, inJaque } from '../helpers/helpers';
 import {
   inValidMoves,
   getValidPawnMoves,
@@ -82,7 +82,6 @@ const handleDropInside = (pieceId, pos) => {
       validMoves = [];
   }
 
-
   if (!inValidMoves(validMoves, pos)) {
     return;
   }
@@ -127,6 +126,10 @@ const handleDropInside = (pieceId, pos) => {
   });
 
   turn.update(() => otherColor);
+
+  const rivalKing = $pieces[`king_${otherColor}`];
+
+  console.log(inJaque(rivalKing.pos, rivalKing.color, $pieces, $grid));
 };
 </script>
 
