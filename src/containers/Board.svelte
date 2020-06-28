@@ -1,6 +1,14 @@
 <script>
-import { pieces, grid, turn, startTime, whiteRemaining, blackRemaining } from '../store/store';
-import { getPieceByCoord, inJaque } from '../helpers/helpers';
+import {
+  pieces,
+  grid,
+  turn,
+  startTime,
+  whiteRemaining,
+  blackRemaining,
+  toPromotePiece,
+} from '../store/store';
+import { getPieceByCoord, inJaque, getOtherColor } from '../helpers/helpers';
 import {
   inValidMoves,
   getValidPawnMoves,
@@ -51,13 +59,10 @@ const handleDragStart = (pieceId) => {
 
 const handleDropInside = (pieceId, pos) => {
   const piece = Object.assign({}, $pieces[pieceId]);
-  let otherColor = 'black';
+  const otherColor = getOtherColor(piece.color);
+
   let validMoves = [];
   let eated = null;
-
-  if (piece.color === 'black') {
-    otherColor = 'white';
-  }
 
   switch(piece.name) {
     case 'pawn':
@@ -125,7 +130,18 @@ const handleDropInside = (pieceId, pos) => {
     return oldGrid;
   });
 
-  turn.update(() => otherColor);
+  // Handle promotion
+  if (
+    piece.name === 'pawn' && piece.color === 'white' && piece.pos.y === 1 ||
+    piece.name === 'pawn' && piece.color === 'black' && piece.pos.y === 6
+  ) {
+    toPromotePiece.update(() => ({
+      ...piece,
+      pos
+    }));
+  } else {
+    turn.update(() => otherColor);
+  }
 
   const rivalKing = $pieces[`king_${otherColor}`];
 

@@ -1,16 +1,13 @@
+import { getOtherColor } from './helpers';
+
 export const insideBounds = (pos) => {
   return pos.x >= 0 && pos.x <= 7 && pos.y >= 0 && pos.y <= 7;
 };
 
 export const getValidMovesUntilLimit = (pos, color, relativePos, grid) => {
   const tempPos = Object.assign({}, pos);
+  const otherColor = getOtherColor(color);
   const result = [];
-
-  let otherColor = 'black';
-
-  if (color === 'black') {
-    otherColor = 'white';
-  }
 
   tempPos.x = tempPos.x + relativePos.x;
   tempPos.y = tempPos.y + relativePos.y;
@@ -45,13 +42,12 @@ export const inValidMoves = (validMoves, pos) => {
 };
 
 export const getValidPawnMoves = (piece, grid) => {
+  const otherColor = getOtherColor(piece.color);
   let result = [];
   let moveDirection = -1;
-  let otherColor = 'black';
 
   if (piece.color === 'black') {
     moveDirection = 1;
-    otherColor = 'white';
   }
 
   // Vertical moves
@@ -122,11 +118,7 @@ export const getValidQueenMoves = (piece, grid) => {
 };
 
 export const getValidKingMoves = (piece, grid) => {
-  let otherColor = 'black';
-
-  if (piece.color === 'black') {
-    otherColor = 'white';
-  }
+  const otherColor = getOtherColor(piece.color);
 
   const result = [
     { x: piece.pos.x + 0, y: piece.pos.y + 1 },

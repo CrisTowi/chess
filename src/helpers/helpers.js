@@ -88,13 +88,13 @@ export const getTimeObjFromMs = (t) => {
   };
 }
 
+export const getOtherColor = (color) => {
+  if (color === 'black') return 'white';
+  return 'black';
+}
+
 export const getRivalPieces = (color, pieces) => {
-  let otherColor = 'black';
-
-  if (color === 'black') {
-    otherColor = 'white';
-  }
-
+  const otherColor = getOtherColor(color);
   return Object.keys(pieces)
     .map((piece) => pieces[piece])
     .filter((piece) => piece.color === otherColor && piece.alive);

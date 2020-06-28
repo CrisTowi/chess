@@ -1,7 +1,8 @@
 <script>
 import PieceIcon from '../components/PieceIcon.svelte';
-import { pieces, whiteRemaining, blackRemaining } from '../store/store';
-import { getTimeObjFromMs } from '../helpers/helpers';
+import PromotePiecesOptions from '../components/PromotePiecesOptions.svelte';
+import { turn, grid,  pieces, whiteRemaining, blackRemaining, toPromotePiece } from '../store/store';
+import { getTimeObjFromMs, getOtherColor } from '../helpers/helpers';
 
 let blackEatedPieces = [];
 let whiteEatedPieces = [];
@@ -24,6 +25,40 @@ blackRemaining.subscribe(() => {
 whiteRemaining.subscribe(() => {
   whiteRemainObj = getTimeObjFromMs($whiteRemaining);
 });
+
+const handlePromotePieceSelected = (piece) => {
+  const otherColor = getOtherColor($toPromotePiece.color);
+
+  pieces.update((oldPieces) => {
+    const newObject = {
+      ...oldPieces,
+      [$toPromotePiece.id]: {
+        ...oldPieces[$toPromotePiece.id],
+        name: piece
+      }
+    };
+
+    return newObject; 
+  });
+
+  grid.update((oldGrid) => {
+    const pos = {
+      x: $toPromotePiece.pos.x,
+      y: $toPromotePiece.pos.y,
+    }
+
+    oldGrid[pos.y][pos.x].piece = {
+      ...$toPromotePiece,
+      name: piece,
+      pos,
+    };
+
+    return oldGrid;
+  });
+
+  turn.update(() => otherColor);
+  toPromotePiece.update(() => null);
+}
 
 </script>
 
@@ -112,22 +147,25 @@ whiteRemaining.subscribe(() => {
         <PieceIcon name={piece.name} color={piece.color} />
       </div>
     {/each}
+    {#if $toPromotePiece && $toPromotePiece.color === 'black'}
+      <PromotePiecesOptions onClick={handlePromotePieceSelected} color={'black'} />
+    {/if}
   </div>
   <div class="Aside-Timer">
-    <div class="Aside-Timer-color">
-      <p class="Aside-Timer-Title">White</p>
-      <p class="Aside-Timer-Time">
-        <span class="Min-label">{whiteRemainObj.min}</span>
-        <span class="Sec-label">{whiteRemainObj.sec}</span>
-        <span class="Ms-label">{whiteRemainObj.ms}</span>
-      </p>
-    </div>
     <div class="Aside-Timer-color">
       <p class="Aside-Timer-Title">Black</p>
       <p class="Aside-Timer-Time">
         <span class="Min-label">{blackRemainObj.min}</span>
         <span class="Sec-label">{blackRemainObj.sec}</span>
         <span class="Ms-label">{blackRemainObj.ms}</span>
+      </p>
+    </div>
+    <div class="Aside-Timer-color">
+      <p class="Aside-Timer-Title">White</p>
+      <p class="Aside-Timer-Time">
+        <span class="Min-label">{whiteRemainObj.min}</span>
+        <span class="Sec-label">{whiteRemainObj.sec}</span>
+        <span class="Ms-label">{whiteRemainObj.ms}</span>
       </p>
     </div>
   </div>
@@ -137,5 +175,8 @@ whiteRemaining.subscribe(() => {
         <PieceIcon name={piece.name} color={piece.color} />
       </div>
     {/each}
+    {#if $toPromotePiece && $toPromotePiece.color === 'white'}
+      <PromotePiecesOptions onClick={handlePromotePieceSelected} color={'white'} />
+    {/if}
   </div>
 </div>
