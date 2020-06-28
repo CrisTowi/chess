@@ -35,7 +35,7 @@ whiteRemaining.subscribe(() => {
 
 .Aside-Pieces {
   box-sizing: border-box;
-  margin: 0px 20px;
+  margin: 0px 0px 0px 20px;
   padding: 20px;
   display: flex;
   background: #D3D3D3;
@@ -48,6 +48,7 @@ whiteRemaining.subscribe(() => {
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin-left: 20px;
 }
 
 .Aside-Timer-Title {
@@ -57,7 +58,7 @@ whiteRemaining.subscribe(() => {
 }
 
 .Aside-Timer-color {
-  width: 45%;
+  width: 50%;
   border: 1px solid #FFFFFF;
   color: #FFFFFF;
 }
@@ -80,6 +81,28 @@ whiteRemaining.subscribe(() => {
   height: 40px;
   font-size: 40px;
 }
+
+@media screen and (max-width: 1255px) {
+  .Aside-Timer {
+    flex-direction: column;
+  }
+
+  .Aside-Timer-color {
+    box-sizing: border-box;
+    margin: 0px 20px;
+    padding: 20px;
+    width: 100%;
+  }
+
+  .Aside-Timer-Title {
+    margin: 0px;
+  }
+
+  .Aside-Timer-Time {
+    margin: 0px;
+  }
+}
+
 </style>
 
 <div class="Aside">
@@ -93,7 +116,7 @@ whiteRemaining.subscribe(() => {
   <div class="Aside-Timer">
     <div class="Aside-Timer-color">
       <p class="Aside-Timer-Title">White</p>
-      <p>
+      <p class="Aside-Timer-Time">
         <span class="Min-label">{whiteRemainObj.min}</span>
         <span class="Sec-label">{whiteRemainObj.sec}</span>
         <span class="Ms-label">{whiteRemainObj.ms}</span>
@@ -101,7 +124,7 @@ whiteRemaining.subscribe(() => {
     </div>
     <div class="Aside-Timer-color">
       <p class="Aside-Timer-Title">Black</p>
-      <p>
+      <p class="Aside-Timer-Time">
         <span class="Min-label">{blackRemainObj.min}</span>
         <span class="Sec-label">{blackRemainObj.sec}</span>
         <span class="Ms-label">{blackRemainObj.ms}</span>
