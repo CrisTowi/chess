@@ -9,7 +9,7 @@ import {
 
 export const nextChar = (c) => {
   return String.fromCharCode(c.charCodeAt(0) + 1);
-}
+};
 
 export const createGrid = () => {
   const boardCells = [];
@@ -45,7 +45,7 @@ export const createGrid = () => {
   }
 
   return boardCells;
-}
+};
 
 export const fillGridWithPieces = (grid, pieces) => {
   const piecesKeys = Object.keys(pieces);
@@ -59,7 +59,7 @@ export const fillGridWithPieces = (grid, pieces) => {
   });
 
   return grid;
-}
+};
 
 export const getPieceByCoord = (x, y, pieces) => {
   const piecesKeys = Object.keys(pieces);
@@ -73,7 +73,7 @@ export const getPieceByCoord = (x, y, pieces) => {
   }
 
   return null;
-}
+};
 
 export const getTimeObjFromMs = (t) => {
   const min = Math.floor((t / 1000) / 60);
@@ -86,19 +86,19 @@ export const getTimeObjFromMs = (t) => {
     sec: sec <= 9 ? `0${sec}` : sec,
     ms: ms <= 9 ? `0${ms}` : ms,
   };
-}
+};
 
 export const getOtherColor = (color) => {
   if (color === 'black') return 'white';
   return 'black';
-}
+};
 
 export const getRivalPieces = (color, pieces) => {
   const otherColor = getOtherColor(color);
   return Object.keys(pieces)
     .map((piece) => pieces[piece])
     .filter((piece) => piece.color === otherColor && piece.alive);
-}
+};
 
 export const inJaque = (pos, color, pieces, grid) => {
   const rivalPieces = getRivalPieces(color, pieces);
@@ -132,4 +132,30 @@ export const inJaque = (pos, color, pieces, grid) => {
   }, false);
 
   return isInJaque;
-}
+};
+
+export const getPiecesObjectAfterMove = (pieces, pieceId, toUpdate) => {
+  const piecesClone = JSON.parse(JSON.stringify(pieces));
+
+  const updated = {
+    ...piecesClone,
+    [pieceId]: {
+      ...piecesClone[pieceId],
+      ...toUpdate,
+    }
+  };
+
+  return updated;
+};
+
+export const getGridAfterMove = (grid, oldPos, newPos, piece) => {
+  const gridClone = JSON.parse(JSON.stringify(grid));
+
+  gridClone[oldPos.y][oldPos.x].piece = null;
+  gridClone[newPos.y][newPos.x].piece = {
+    ...piece,
+    pos: newPos,
+  };
+
+  return gridClone;
+};

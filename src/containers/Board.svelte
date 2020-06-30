@@ -8,7 +8,13 @@ import {
   blackRemaining,
   toPromotePiece,
 } from '../store/store';
-import { getPieceByCoord, inJaque, getOtherColor } from '../helpers/helpers';
+import {
+  getGridAfterMove,
+  getOtherColor,
+  getPieceByCoord,
+  getPiecesObjectAfterMove,
+  inJaque,
+} from '../helpers/helpers';
 import {
   inValidMoves,
   getValidPawnMoves,
@@ -25,29 +31,6 @@ const handleDragStart = (pieceId) => {
   const piece = JSON.parse(JSON.stringify($pieces[pieceId]));
   let validMoves = [];
 
-  switch(piece.name) {
-    case 'pawn':
-      validMoves = getValidPawnMoves(piece, $grid);
-      break;
-    case 'rook':
-      validMoves = getValidRookMoves(piece, $grid);
-      break;
-    case 'bishop':
-      validMoves = getValidBishopMoves(piece, $grid);
-      break;
-    case 'queen':
-      validMoves = getValidQueenMoves(piece, $grid);
-      break;
-    case 'king':
-      validMoves = getValidKingMoves(piece, $grid);
-      break;
-    case 'knight':
-      validMoves = getValidKnightMoves(piece, $grid);
-      break;
-    default:
-      validMoves = [];
-  }
-
   grid.update((oldGrid) => {
     validMoves.forEach((move) => {
       oldGrid[move.y][move.x].reachable = true;
@@ -62,7 +45,6 @@ const handleDropInside = (pieceId, pos) => {
   const otherColor = getOtherColor(piece.color);
 
   let validMoves = [];
-  let eated = null;
 
   switch(piece.name) {
     case 'pawn':
@@ -91,44 +73,26 @@ const handleDropInside = (pieceId, pos) => {
     return;
   }
 
-  if ($grid[pos.y][pos.x].piece) {
-    eated = $grid[pos.y][pos.x].piece.id;
-  }
+  const updatedPiece = getPiecesObjectAfterMove($pieces, piece.id, {
+    pos,
+    moved: true,
+  });
 
-  pieces.update((oldPieces) => {
-    const newObject = {
-      ...oldPieces,
-      [pieceId]: {
-        ...oldPieces[pieceId],
-        pos,
-        moved: true,
-      }
-    };
+  const updatedGrid = getGridAfterMove($grid, piece.pos, pos, piece);
 
-    if (eated) {
-      newObject[eated] = {
-        ...newObject[eated],
+  pieces.update(() => {
+    if ($grid[pos.y][pos.x].piece) {
+      const eatedId = $grid[pos.y][pos.x].piece.id;
+      return getPiecesObjectAfterMove(updatedPiece, eatedId, {
         alive: false,
         pos: null,
-      }
+      });
     }
 
-    return newObject; 
+    return updatedPiece;
   });
 
-  grid.update((oldGrid) => {
-    validMoves.forEach((move) => {
-      oldGrid[move.y][move.x].reachable = false;
-    });
-    oldGrid[piece.pos.y][piece.pos.x].piece = null;
-    oldGrid[pos.y][pos.x].piece = {
-      ...piece,
-      pos,
-      id: pieceId
-    };
-
-    return oldGrid;
-  });
+  grid.update(() => updatedGrid);
 
   // Handle promotion
   if (

@@ -12,10 +12,10 @@ let whiteRemainObj = getTimeObjFromMs($whiteRemaining);
 pieces.subscribe(() => {
   blackEatedPieces = Object.keys($pieces)
     .filter(key => key.includes('black') && !$pieces[key].alive)
-    .map((pieceKey) => $pieces[pieceKey])
+    .map((pieceKey) => $pieces[pieceKey]);
   whiteEatedPieces = Object.keys($pieces)
     .filter(key => key.includes('white') && !$pieces[key].alive)
-    .map((pieceKey) => $pieces[pieceKey])
+    .map((pieceKey) => $pieces[pieceKey]);
 });
 
 blackRemaining.subscribe(() => {
