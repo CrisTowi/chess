@@ -4,7 +4,6 @@ import Piece from './Piece.svelte';
 
 export let color;
 export let column;
-export let onDragStart;
 export let onDropInside;
 export let piece;
 export let pos;
@@ -17,7 +16,6 @@ const handleDragStart = (e, id) => {
     return;
   }
 
-  onDragStart(id);
   e.dataTransfer.setData("piece_id", id);
 };
 

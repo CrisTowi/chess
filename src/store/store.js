@@ -46,3 +46,4 @@ export const blackRemaining = writable(300000);
 export const startTime = writable(new Date());
 export const timerInterval = writable(null);
 export const toPromotePiece = writable(null);
+export const inJaque = writable(null);

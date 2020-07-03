@@ -100,9 +100,10 @@ export const getRivalPieces = (color, pieces) => {
     .filter((piece) => piece.color === otherColor && piece.alive);
 };
 
-export const inJaque = (pos, color, pieces, grid) => {
-  const rivalPieces = getRivalPieces(color, pieces);
-  const isInJaque = rivalPieces.reduce((prevVal, piece) => {
+export const isInJaque = (king, pieces, grid) => {
+  const rivalPieces = getRivalPieces(king.color, pieces);
+
+  return rivalPieces.reduce((prevVal, piece) => {
     let validMoves = [];
 
     switch(piece.name) {
@@ -128,10 +129,8 @@ export const inJaque = (pos, color, pieces, grid) => {
         validMoves = [];
     }
 
-    return !!validMoves.some(move => move.x === pos.x && move.y === pos.y) || prevVal;
+    return !!validMoves.some(move => move.x === king.pos.x && move.y === king.pos.y) || prevVal;
   }, false);
-
-  return isInJaque;
 };
 
 export const getPiecesObjectAfterMove = (pieces, pieceId, toUpdate) => {
@@ -159,3 +158,32 @@ export const getGridAfterMove = (grid, oldPos, newPos, piece) => {
 
   return gridClone;
 };
+
+export const getPieceValidMoves = (piece, grid) => {
+  let validMoves = [];
+
+  switch(piece.name) {
+    case 'pawn':
+      validMoves = getValidPawnMoves(piece, grid);
+      break;
+    case 'rook':
+      validMoves = getValidRookMoves(piece, grid);
+      break;
+    case 'bishop':
+      validMoves = getValidBishopMoves(piece, grid);
+      break;
+    case 'queen':
+      validMoves = getValidQueenMoves(piece, grid);
+      break;
+    case 'king':
+      validMoves = getValidKingMoves(piece, grid);
+      break;
+    case 'knight':
+      validMoves = getValidKnightMoves(piece, grid);
+      break;
+    default:
+      validMoves = [];
+  }
+
+  return validMoves;
+}
