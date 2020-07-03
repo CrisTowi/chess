@@ -3,7 +3,18 @@ import { onMount } from 'svelte';
 import Board from './containers/Board.svelte';
 import Aside from './containers/Aside.svelte';
 
-import { turn, whiteRemaining, blackRemaining, startTime, timerInterval } from './store/store';
+import {
+	blackRemaining,
+	startTime,
+	timerInterval,
+	turn,
+	whiteRemaining,
+	winner,
+} from './store/store';
+
+import {
+  getOtherColor,
+} from './helpers/helpers';
 
 turn.subscribe(() => {
 	clearInterval($timerInterval);
@@ -12,15 +23,31 @@ turn.subscribe(() => {
 		return setInterval(() => {
 			if ($turn === 'white') {
 				whiteRemaining.update((oldValue) => {
-					return oldValue - 10;
+					const toReturnValue = oldValue - 10;
+					if (toReturnValue === 0) {
+						winner.update(() => getOtherColor($turn));
+					}
+
+					return toReturnValue;
 				});
 			} else if ($turn === 'black') {
 				blackRemaining.update((oldValue) => {
-					return oldValue - 10;
+					const toReturnValue = oldValue - 10;
+					if (toReturnValue === 0) {
+						winner.update(() => getOtherColor($turn));
+					}
+
+					return toReturnValue;
 				});
 			}
 		}, 10)
 	});
+});
+
+winner.subscribe((winnerValue) => {
+	if (winnerValue) {
+		clearInterval($timerInterval);
+	}
 });
 
 </script>

@@ -93,16 +93,13 @@ export const getOtherColor = (color) => {
   return 'black';
 };
 
-export const getRivalPieces = (color, pieces) => {
-  const otherColor = getOtherColor(color);
+export const getPiecesByColor = (color, pieces) => {
   return Object.keys(pieces)
     .map((piece) => pieces[piece])
-    .filter((piece) => piece.color === otherColor && piece.alive);
+    .filter((piece) => piece.color === color && piece.alive);
 };
 
-export const isInJaque = (king, pieces, grid) => {
-  const rivalPieces = getRivalPieces(king.color, pieces);
-
+export const isInCheck = (king, rivalPieces, grid) => {
   return rivalPieces.reduce((prevVal, piece) => {
     let validMoves = [];
 
@@ -132,6 +129,36 @@ export const isInJaque = (king, pieces, grid) => {
     return !!validMoves.some(move => move.x === king.pos.x && move.y === king.pos.y) || prevVal;
   }, false);
 };
+
+export const isInCheckMate = (piece, pieces, grid) => {
+  const gridClone = JSON.parse(JSON.stringify(grid));
+  const otherColor = getOtherColor(piece.color);
+  const currentPieces = getPiecesByColor(piece.color, pieces);
+  const rivalPieces = getPiecesByColor(otherColor, pieces);
+  const rivalKing = pieces['king_' + otherColor];
+
+  for (let i = 0; i < rivalPieces.length; i++) {
+    const validMoves = getPieceValidMoves(rivalPieces[i], gridClone);
+
+    for (let j = 0; j < validMoves.length; j++) {
+      const updatedGrid = getGridAfterMove(gridClone, rivalPieces[i].pos, validMoves[j], rivalPieces[i]);
+      let kingEval = rivalKing;
+
+      if (rivalPieces[i].name === 'king') {
+        kingEval = {
+          ...rivalKing,
+          pos: validMoves[j]
+        };
+      }
+
+      if (!isInCheck(kingEval, currentPieces, updatedGrid)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
 
 export const getPiecesObjectAfterMove = (pieces, pieceId, toUpdate) => {
   const piecesClone = JSON.parse(JSON.stringify(pieces));

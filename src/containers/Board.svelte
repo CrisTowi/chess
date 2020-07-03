@@ -3,19 +3,18 @@ import {
   pieces,
   grid,
   turn,
-  startTime,
-  whiteRemaining,
-  blackRemaining,
   toPromotePiece,
-  inJaque,
+  inCheck,
+  winner,
 } from '../store/store';
 import {
   getGridAfterMove,
   getOtherColor,
-  getPieceByCoord,
   getPiecesObjectAfterMove,
   getPieceValidMoves,
-  isInJaque,
+  getPiecesByColor,
+  isInCheck,
+  isInCheckMate,
 } from '../helpers/helpers';
 import {
   inValidMoves,
@@ -35,17 +34,20 @@ const handleDropInside = (pieceId, pos) => {
   const currentKing = $pieces['king_' + piece.color];
   const rivalKing = $pieces['king_' + otherColor];
 
+  // Pieces calculation
+  const rivalPieces = getPiecesByColor(otherColor, $pieces);
+
   let piaceValidMoves = getPieceValidMoves(piece, $grid);
 
   if (!inValidMoves(piaceValidMoves, pos)) return;
 
   // Get updated state of the game after the move before applying
-  const updatedPieces = getPiecesObjectAfterMove($pieces, piece.id, {
+  let updatedPieces = getPiecesObjectAfterMove($pieces, piece.id, {
     pos,
     moved: true,
   });
 
-  const updatedGrid = getGridAfterMove($grid, piece.pos, pos, piece);
+  let updatedGrid = getGridAfterMove($grid, piece.pos, pos, piece);
 
   if ($grid[pos.y][pos.x].piece) {
     const eatedId = $grid[pos.y][pos.x].piece.id;
@@ -55,11 +57,23 @@ const handleDropInside = (pieceId, pos) => {
     });
   }
 
-  if ($inJaque !== piece.color && isInJaque(currentKing, updatedPieces, updatedGrid)) {
+  const currentPieces = getPiecesByColor(piece.color, updatedPieces);
+
+  if ($inCheck !== piece.color && isInCheck(currentKing, rivalPieces, updatedGrid)) {
     return;
-  } else if ($inJaque === piece.color && isInJaque(currentKing, updatedPieces, updatedGrid)) {
-    console.log('You have to get out of Jaque, MORON!')
-    return;
+  } else if ($inCheck === piece.color) {
+    let kingEval = currentKing;
+
+    if (piece.name === 'king') {
+      kingEval = {
+        ...currentKing,
+        pos
+      };
+    }
+
+    if (isInCheck(kingEval, rivalPieces, updatedGrid)) {
+      return;
+    }
   }
 
   // Apply changes on the state
@@ -80,10 +94,14 @@ const handleDropInside = (pieceId, pos) => {
     turn.update(() => otherColor);
   }
 
-  if (isInJaque(rivalKing, updatedPieces, updatedGrid)) {
-    inJaque.update(() => rivalKing.color);
-  } else if (!isInJaque(currentKing, updatedPieces, updatedGrid)) {
-    inJaque.update(() => null);
+  if (isInCheck(rivalKing, currentPieces, updatedGrid)) {
+    inCheck.update(() => rivalKing.color);
+
+    if (isInCheckMate(piece, updatedPieces, updatedGrid)) {
+      winner.update(() => piece.color);
+    }
+  } else if (!isInCheck(currentKing, rivalPieces, updatedGrid)) {
+    inCheck.update(() => null);
   }
 };
 </script>
