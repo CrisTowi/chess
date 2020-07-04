@@ -72,9 +72,16 @@ const handlePromotePieceSelected = (piece) => {
   box-sizing: border-box;
   margin: 0px 0px 0px 20px;
   padding: 20px;
-  display: flex;
   background: #D3D3D3;
   height: 33.33%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.Aside-Pieces-container {
+  display: flex;
+  align-items: center;
 }
 
 .Aside-Timer {
@@ -115,6 +122,8 @@ const handlePromotePieceSelected = (piece) => {
   width: 40px;
   height: 40px;
   font-size: 40px;
+  margin-right: 10px;
+  text-align: center;
 }
 
 @media screen and (max-width: 1255px) {
@@ -142,11 +151,13 @@ const handlePromotePieceSelected = (piece) => {
 
 <div class="Aside">
   <div class="Aside-Pieces">
-    {#each blackEatedPieces as piece}
-      <div class="Piece-container">
-        <PieceIcon name={piece.name} color={piece.color} />
-      </div>
-    {/each}
+    <div class="Aside-Pieces-container">
+      {#each blackEatedPieces as piece}
+        <div class="Piece-container">
+          <PieceIcon name={piece.name} color={piece.color} />
+        </div>
+      {/each}
+    </div>
     {#if $toPromotePiece && $toPromotePiece.color === 'black'}
       <PromotePiecesOptions onClick={handlePromotePieceSelected} color={'black'} />
     {/if}
@@ -170,11 +181,13 @@ const handlePromotePieceSelected = (piece) => {
     </div>
   </div>
   <div class="Aside-Pieces">
-    {#each whiteEatedPieces as piece}
-      <div class="Piece-container">
-        <PieceIcon name={piece.name} color={piece.color} />
-      </div>
-    {/each}
+    <div class="Aside-Pieces-container">
+      {#each whiteEatedPieces as piece}
+        <div class="Piece-container">
+          <PieceIcon name={piece.name} color={piece.color} />
+        </div>
+      {/each}
+    </div>
     {#if $toPromotePiece && $toPromotePiece.color === 'white'}
       <PromotePiecesOptions onClick={handlePromotePieceSelected} color={'white'} />
     {/if}

@@ -20,11 +20,12 @@ const PIECES = [
 
   display: flex;
   font-size: 30px;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .PromotePiecesOptions-Option {
   cursor: pointer;
+  margin-right: 20px;
 }
 </style>
 
