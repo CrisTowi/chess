@@ -1,5 +1,6 @@
 <script>
 export let onClick;
+export let winner;
 </script>
 
 <style>
@@ -39,11 +40,20 @@ export let onClick;
 .TimeSelect-Option:hover {
   transform: scale(1.05);
 }
+
+.winner {
+  text-transform: uppercase;
+}
 </style>
 
 <div class="TimeSelect">
   <div class="TimeSelect-instructions">
-    <h2>Please select a time limit</h2>
+    {#if winner}
+      <h2>The winner is <span class="winner">{winner}</span></h2>
+    {/if}
+  </div>
+  <div class="TimeSelect-instructions">
+    <h2>Please select a time limit to start the game</h2>
   </div>
   <div class="TimeSelect-Selector">
     <div on:click={() => onClick(10 * 60 * 1000)} class="TimeSelect-Option">

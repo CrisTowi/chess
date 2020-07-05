@@ -94,10 +94,8 @@ const handleStartGame = (time) => {
 </style>
 
 <div class="App">
-	<Modal visible={!$started}>
-		{#if !$started}
-			<TimeSelect onClick={handleStartGame} />
-		{/if}
+	<Modal visible={!$started || $winner}>
+		<TimeSelect winner={$winner} onClick={handleStartGame} />
 	</Modal>
 	<div class="Board-container">
 		<Board />
