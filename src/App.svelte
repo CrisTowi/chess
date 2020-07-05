@@ -2,10 +2,14 @@
 import { onMount } from 'svelte';
 import Board from './containers/Board.svelte';
 import Aside from './containers/Aside.svelte';
+import Modal from './containers/Modal.svelte';
+
+import TimeSelect from './components/TimeSelect.svelte';
 
 import {
 	blackRemaining,
 	startTime,
+	started,
 	timerInterval,
 	turn,
 	whiteRemaining,
@@ -17,31 +21,33 @@ import {
 } from './helpers/helpers';
 
 turn.subscribe(() => {
-	clearInterval($timerInterval);
-
-	timerInterval.update(() => {
-		return setInterval(() => {
-			if ($turn === 'white') {
-				whiteRemaining.update((oldValue) => {
-					const toReturnValue = oldValue - 10;
-					if (toReturnValue === 0) {
-						winner.update(() => getOtherColor($turn));
-					}
-
-					return toReturnValue;
-				});
-			} else if ($turn === 'black') {
-				blackRemaining.update((oldValue) => {
-					const toReturnValue = oldValue - 10;
-					if (toReturnValue === 0) {
-						winner.update(() => getOtherColor($turn));
-					}
-
-					return toReturnValue;
-				});
-			}
-		}, 10)
-	});
+	if ($started) {
+		clearInterval($timerInterval);
+	
+		timerInterval.update(() => {
+			return setInterval(() => {
+				if ($turn === 'white') {
+					whiteRemaining.update((oldValue) => {
+						const toReturnValue = oldValue - 10;
+						if (toReturnValue === 0) {
+							winner.update(() => getOtherColor($turn));
+						}
+	
+						return toReturnValue;
+					});
+				} else if ($turn === 'black') {
+					blackRemaining.update((oldValue) => {
+						const toReturnValue = oldValue - 10;
+						if (toReturnValue === 0) {
+							winner.update(() => getOtherColor($turn));
+						}
+	
+						return toReturnValue;
+					});
+				}
+			}, 10)
+		});
+	}
 });
 
 winner.subscribe((winnerValue) => {
@@ -49,6 +55,13 @@ winner.subscribe((winnerValue) => {
 		clearInterval($timerInterval);
 	}
 });
+
+const handleStartGame = (time) => {
+	started.update(() => true);
+	turn.update(() => 'white');
+	whiteRemaining.update(() => time);
+	blackRemaining.update(() => time);
+};
 
 </script>
 
@@ -81,6 +94,11 @@ winner.subscribe((winnerValue) => {
 </style>
 
 <div class="App">
+	<Modal visible={!$started}>
+		{#if !$started}
+			<TimeSelect onClick={handleStartGame} />
+		{/if}
+	</Modal>
 	<div class="Board-container">
 		<Board />
 	</div>
