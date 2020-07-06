@@ -99,6 +99,7 @@ const handleDropInside = (pieceId, pos) => {
 
     if (isInCheckMate(piece, updatedPieces, updatedGrid)) {
       winner.update(() => piece.color);
+      turn.update(() => null);
     }
   } else if (!isInCheck(currentKing, rivalPieces, updatedGrid)) {
     inCheck.update(() => null);

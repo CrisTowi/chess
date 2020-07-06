@@ -8,20 +8,29 @@ import TimeSelect from './components/TimeSelect.svelte';
 
 import {
 	blackRemaining,
-	startTime,
+	emptyGrid,
+	grid,
+	inCheck,
+	pieces,
+	PIECES,
 	started,
 	timerInterval,
+	toPromotePiece,
 	turn,
 	whiteRemaining,
 	winner,
 } from './store/store';
 
 import {
-  getOtherColor,
+	getOtherColor,
+	fillGridWithPieces,
 } from './helpers/helpers';
 
 turn.subscribe(() => {
+	console.log('$started', $started);
+
 	if ($started) {
+		console.log('YA EMEXO')
 		clearInterval($timerInterval);
 	
 		timerInterval.update(() => {
@@ -31,6 +40,7 @@ turn.subscribe(() => {
 						const toReturnValue = oldValue - 10;
 						if (toReturnValue === 0) {
 							winner.update(() => getOtherColor($turn));
+				      turn.update(() => null);
 						}
 	
 						return toReturnValue;
@@ -40,6 +50,7 @@ turn.subscribe(() => {
 						const toReturnValue = oldValue - 10;
 						if (toReturnValue === 0) {
 							winner.update(() => getOtherColor($turn));
+				      turn.update(() => null);
 						}
 	
 						return toReturnValue;
@@ -57,7 +68,12 @@ winner.subscribe((winnerValue) => {
 });
 
 const handleStartGame = (time) => {
+	toPromotePiece.update(() => null);
+	inCheck.update(() => null);
+	pieces.update(() => PIECES);
+	grid.update(() => fillGridWithPieces(emptyGrid, PIECES));
 	started.update(() => true);
+	winner.update(() => null);
 	turn.update(() => 'white');
 	whiteRemaining.update(() => time);
 	blackRemaining.update(() => time);

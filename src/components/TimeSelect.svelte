@@ -49,7 +49,7 @@ export let winner;
 <div class="TimeSelect">
   <div class="TimeSelect-instructions">
     {#if winner}
-      <h2>The winner is <span class="winner">{winner}</span></h2>
+      <h2>The winner is <span class="winner">{winner}</span>!</h2>
     {/if}
   </div>
   <div class="TimeSelect-instructions">

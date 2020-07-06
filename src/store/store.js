@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { createGrid, fillGridWithPieces } from '../helpers/helpers';
 
-const PIECES = {
+export const PIECES = {
   'bishop_1_black': { id: 'bishop_1_black', pos: { y: 0, x: 2 }, moved: false, color: 'black', name: 'bishop', alive: true },
   'bishop_2_black': { id: 'bishop_2_black', pos: { y: 0, x: 5 }, moved: false, color: 'black', name: 'bishop', alive: true },
   'king_black': { id: 'king_black', pos: { y: 0, x: 4 }, moved: false, color: 'black', name: 'king', alive: true },
@@ -36,7 +36,7 @@ const PIECES = {
   'rook_2_white': { id: 'rook_2_white', pos: { y: 7, x: 7 }, moved: false, color: 'white', name: 'rook', alive: true },
 };
 
-const emptyGrid = createGrid();
+export const emptyGrid = createGrid();
 
 export const grid = writable(fillGridWithPieces(emptyGrid, PIECES));
 export const pieces = writable(PIECES);
@@ -44,7 +44,6 @@ export const turn = writable(null);
 export const started = writable(false);
 export const whiteRemaining = writable(0);
 export const blackRemaining = writable(0);
-export const startTime = writable(new Date());
 export const timerInterval = writable(null);
 export const toPromotePiece = writable(null);
 export const inCheck = writable(null);
