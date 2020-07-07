@@ -27,10 +27,7 @@ import {
 } from './helpers/helpers';
 
 turn.subscribe(() => {
-	console.log('$started', $started);
-
 	if ($started) {
-		console.log('YA EMEXO')
 		clearInterval($timerInterval);
 	
 		timerInterval.update(() => {
