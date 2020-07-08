@@ -134,7 +134,7 @@ const handlePromotePieceSelected = (piece) => {
   .Aside-Timer-color {
     box-sizing: border-box;
     margin: 0px 20px;
-    padding: 20px;
+    padding: 5px;
     width: 100%;
   }
 
@@ -144,6 +144,86 @@ const handlePromotePieceSelected = (piece) => {
 
   .Aside-Timer-Time {
     margin: 0px;
+  }
+
+  .Aside {
+    margin-top: 20px;
+    display: flex;
+  }
+
+  .Aside-Pieces {
+    flex: 1;
+    margin: 0px;
+    height: 143px;
+    padding: 5px;
+  }
+
+  .Aside-Timer {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .Min-label {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .Sec-label {
+    font-size: 15px;
+  }
+
+  .Ms-label {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-height: 890px) {
+  .Aside {
+    margin-top: 20px;
+    display: flex;
+  }
+
+  .Aside-Pieces {
+    padding: 5px;
+    flex: 1;
+    margin: 0px;
+    height: 143px;
+  }
+
+  .Aside-Timer {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .Min-label {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .Sec-label {
+    font-size: 15px;
+  }
+
+  .Ms-label {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 785px) {
+  .Piece-container {
+    font-size: 45px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .Piece-container {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .Piece-container {
+    font-size: 20px;
   }
 }
 

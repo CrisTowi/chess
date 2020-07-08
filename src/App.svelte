@@ -95,14 +95,59 @@ const handleStartGame = (time) => {
 		background: #75BFA6;
 	}
 
+	.square {
+		position: relative;
+		width: 80%;
+		max-width: calc(100vh - 40px);
+	}
+
+	.square:after {
+		content: "";
+		display: block;
+		padding-bottom: 100%;
+	}
+
 	.Board-container {
-		height: calc(100vmin - 40px);
-		width: calc(100vmin - 40px);
+		position: absolute;
+		height: 100%;
+		width: 100%;
 	}
 
 	.Aside-container {
 		flex: 1;
 		height: 100%;
+	}
+
+	@media screen and (max-width: 1255px) {
+		.square {
+			width: 100%;
+		}
+
+		.App {
+			flex-direction: column;
+			height: auto;
+			min-height: 100vh;
+		}
+
+		.Aside-container {
+			width: 100%;
+		}
+	}
+
+	@media screen and (max-height: 890px) {
+		.square {
+			width: 100%;
+		}
+
+		.App {
+			flex-direction: column;
+			height: auto;
+			min-height: 100vh;
+		}
+
+		.Aside-container {
+			width: 100%;
+		}
 	}
 </style>
 
@@ -110,8 +155,10 @@ const handleStartGame = (time) => {
 	<Modal visible={!$started || $winner}>
 		<TimeSelect winner={$winner} onClick={handleStartGame} />
 	</Modal>
-	<div class="Board-container">
-		<Board />
+	<div class="square">
+		<div class="Board-container">
+			<Board />
+		</div>
 	</div>
 	<div class="Aside-container">
 		<Aside />
