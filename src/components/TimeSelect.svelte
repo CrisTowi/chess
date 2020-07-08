@@ -20,6 +20,7 @@ export let winner;
 .TimeSelect-Selector {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   width: 100%;
 }
 
@@ -43,6 +44,21 @@ export let winner;
 
 .winner {
   text-transform: uppercase;
+}
+
+@media screen and (max-width: 768px) {
+  .TimeSelect-instructions {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .TimeSelect-Selector {
+    flex-direction: column;
+  }
+
+  .TimeSelect-Option {
+    margin-top: 20px;
+  }
 }
 </style>
 
