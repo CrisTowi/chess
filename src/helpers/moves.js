@@ -4,7 +4,6 @@ import {
   pieces,
   grid,
   turn,
-  toPromotePiece,
   inCheck,
   winner,
 } from '../store/store';
@@ -22,6 +21,10 @@ import {
 import {
   inValidMoves,
 } from '../helpers/validMoves';
+
+import {
+  handlePromote,
+} from '../helpers/chessActions';
 
 export const handleCastling = (king, rook) => {
   const $pieces = get(pieces);
@@ -65,7 +68,7 @@ export const handleCastling = (king, rook) => {
   turn.update(() => otherColor);
 
   if (isInCheck(rivalKing, currentPieces, updatedGrid)) {
-    inCheck.update(() => rivalKing.color);
+    inCheck.update(() => rivalKing);
 
     if (isInCheckMate(king, updatedPieces, updatedGrid)) {
       winner.update(() => king.color);
@@ -110,9 +113,10 @@ export const handlePieceMove = (piece, pos) => {
 
   const currentPieces = getPiecesByColor(piece.color, updatedPieces);
 
-  if ($inCheck !== piece.color && isInCheck(currentKing, rivalPieces, updatedGrid)) {
+  // If you are in check, you have to get out of check
+  if (($inCheck && (inCheck.color !== piece.color)) && isInCheck(currentKing, rivalPieces, updatedGrid)) {
     return;
-  } else if ($inCheck === piece.color) {
+  } else if ($inCheck && ($inCheck.color === piece.color)) {
     let kingEval = currentKing;
 
     if (piece.name === 'king') {
@@ -131,22 +135,11 @@ export const handlePieceMove = (piece, pos) => {
   pieces.update(() => updatedPieces);
   grid.update(() => updatedGrid);
 
-  // Handle promotion
-  if (
-    piece.name === 'pawn' && piece.color === 'white' && piece.pos.y === 1 ||
-    piece.name === 'pawn' && piece.color === 'black' && piece.pos.y === 6
-  ) {
-    toPromotePiece.update(() => ({
-      ...piece,
-      pos
-    }));
-  } else {
-    // End turn
-    turn.update(() => otherColor);
-  }
+
+  handlePromote(piece, pos);
 
   if (isInCheck(rivalKing, currentPieces, updatedGrid)) {
-    inCheck.update(() => rivalKing.color);
+    inCheck.update(() => rivalKing);
 
     if (isInCheckMate(piece, updatedPieces, updatedGrid)) {
       winner.update(() => piece.color);

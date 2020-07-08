@@ -46,3 +46,20 @@ export const handlePromotePieceSelected = (piece) => {
   turn.update(() => otherColor);
   toPromotePiece.update(() => null);
 }
+
+export const handlePromote = (piece, pos) => {
+  const otherColor = getOtherColor(piece.color);
+
+  // Handle promotion
+  if (
+    piece.name === 'pawn' && piece.color === 'white' && piece.pos.y === 1 ||
+    piece.name === 'pawn' && piece.color === 'black' && piece.pos.y === 6
+  ) {
+    toPromotePiece.update(() => ({
+      ...piece,
+      pos
+    }));
+  } else {
+    turn.update(() => otherColor);
+  }
+}

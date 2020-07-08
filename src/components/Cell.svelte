@@ -9,6 +9,7 @@ export let piece;
 export let pos;
 export let reachable;
 export let row;
+export let inCheck;
 
 const handleDragStart = (e, id) => {
   if (!id.includes($turn)) {
@@ -36,8 +37,8 @@ const handleDrop = (e) => {
   background: #957656;
 }
 
-.Cell--reachable {
-  background: yellow;
+.Cell--incheck {
+  background: red;
 }
 
 .Marks-container {
@@ -85,7 +86,7 @@ const handleDrop = (e) => {
 <div
   on:drop={handleDrop}
   ondragover="return false"
-  class={`Cell ${color === 'black' ? 'Cell--black' : ''} ${reachable ? 'Cell--reachable' : ''}`}>
+  class={`Cell ${color === 'black' ? 'Cell--black' : ''} ${inCheck ? 'Cell--incheck' : ''}`}>
   <div class="Marks-container">
     {#if row}
       <div class={`row-mark ${color === 'white' ? 'row-mark--black' : ''}`}>
