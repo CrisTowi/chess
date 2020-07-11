@@ -7,41 +7,40 @@ import {
   pieces,
   toPromotePiece,
   turn,
+  inCheck,
+  winner,
 } from '../store/store';
 
 // Helpers
-import { getOtherColor } from '../helpers/helpers';
+import {
+  getOtherColor,
+  isInCheck,
+  isInCheckMate,
+  getPiecesObjectAfterMove,
+  getGridAfterSwitchPieceProp,
+  getPiecesByColor,
+} from '../helpers/helpers';
 
 export const handlePromotePieceSelected = (piece) => {
   const $toPromotePiece = get(toPromotePiece);
+  const $pieces = get(pieces);
+  const $grid = get(grid);
+
   const otherColor = getOtherColor($toPromotePiece.color);
 
-  pieces.update((oldPieces) => {
-    const newObject = {
-      ...oldPieces,
-      [$toPromotePiece.id]: {
-        ...oldPieces[$toPromotePiece.id],
-        name: piece
-      }
-    };
-
-    return newObject; 
+  let updatedPieces = getPiecesObjectAfterMove($pieces, $toPromotePiece.id, {
+    name: piece
   });
 
-  grid.update((oldGrid) => {
-    const pos = {
-      x: $toPromotePiece.pos.x,
-      y: $toPromotePiece.pos.y,
-    }
+  let updatedGrid = getGridAfterSwitchPieceProp($grid, $toPromotePiece.pos, updatedPieces[$toPromotePiece.id]);
 
-    oldGrid[pos.y][pos.x].piece = {
-      ...$toPromotePiece,
-      name: piece,
-      pos,
-    };
+  pieces.update(() => updatedPieces);
+  grid.update(() => updatedGrid);
 
-    return oldGrid;
-  });
+  const currentPieces = getPiecesByColor($toPromotePiece.color, updatedPieces);
+  const rivalPieces = getPiecesByColor(otherColor, updatedPieces);
+
+  handleCheckAndCheckMate(piece, currentPieces, rivalPieces, updatedPieces, updatedGrid)
 
   turn.update(() => otherColor);
   toPromotePiece.update(() => null);
@@ -61,5 +60,21 @@ export const handlePromote = (piece, pos) => {
     }));
   } else {
     turn.update(() => otherColor);
+  }
+}
+
+export const handleCheckAndCheckMate = (piece, currentPieces, rivalPieces, updatedPieces, updatedGrid) => {
+  const currentKing = currentPieces.find((p) => p.name === 'king');
+  const rivalKing = rivalPieces.find((p) => p.name === 'king');
+
+  if (isInCheck(rivalKing, currentPieces, updatedGrid)) {
+    inCheck.update(() => rivalKing);
+
+    if (isInCheckMate(piece, updatedPieces, updatedGrid)) {
+      winner.update(() => piece.color);
+      turn.update(() => null);
+    }
+  } else if (!isInCheck(currentKing, rivalPieces, updatedGrid)) {
+    inCheck.update(() => null);
   }
 }

@@ -186,6 +186,13 @@ export const getGridAfterMove = (grid, oldPos, newPos, piece) => {
   return gridClone;
 };
 
+export const getGridAfterSwitchPieceProp = (grid, pos, piece) => {
+  const gridClone = JSON.parse(JSON.stringify(grid));
+  gridClone[pos.y][pos.x].piece = piece;
+
+  return gridClone;
+};
+
 export const getPieceValidMoves = (piece, grid) => {
   let validMoves = [];
 

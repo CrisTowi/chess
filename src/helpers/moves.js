@@ -23,7 +23,7 @@ import {
 } from '../helpers/validMoves';
 
 import {
-  handlePromote,
+  handlePromote, handleCheckAndCheckMate,
 } from '../helpers/chessActions';
 
 export const handleCastling = (king, rook) => {
@@ -137,15 +137,5 @@ export const handlePieceMove = (piece, pos) => {
 
 
   handlePromote(piece, pos);
-
-  if (isInCheck(rivalKing, currentPieces, updatedGrid)) {
-    inCheck.update(() => rivalKing);
-
-    if (isInCheckMate(piece, updatedPieces, updatedGrid)) {
-      winner.update(() => piece.color);
-      turn.update(() => null);
-    }
-  } else if (!isInCheck(currentKing, rivalPieces, updatedGrid)) {
-    inCheck.update(() => null);
-  }
+  handleCheckAndCheckMate(piece, currentPieces, rivalPieces, updatedPieces, updatedGrid);
 }
