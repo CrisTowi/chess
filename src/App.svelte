@@ -86,7 +86,7 @@ const handleStartGame = (time) => {
 
 	.App {
 		height: 100vh;
-		width: 100vw;
+		width: calc(100vw - (100vw - 100%));
 		display: flex;
 		align-items: center;
 		justify-content: center;

@@ -86,23 +86,19 @@ export const handlePieceMove = (piece, pos) => {
 
   const otherColor = getOtherColor(piece.color);
   const currentKing = $pieces['king_' + piece.color];
-  const rivalKing = $pieces['king_' + otherColor];
-
-  // Pieces calculation
-  const rivalPieces = getPiecesByColor(otherColor, $pieces);
 
   let piaceValidMoves = getPieceValidMoves(piece, $grid);
-
+  
   if (!inValidMoves(piaceValidMoves, pos)) return;
-
+  
   // Get updated state of the game after the move before applying
   let updatedPieces = getPiecesObjectAfterMove($pieces, piece.id, {
     pos,
     moved: true,
   });
-
+  
   let updatedGrid = getGridAfterMove($grid, piece.pos, pos, piece);
-
+  
   if ($grid[pos.y][pos.x].piece) {
     const eatedId = $grid[pos.y][pos.x].piece.id;
     updatedPieces = getPiecesObjectAfterMove(updatedPieces, eatedId, {
@@ -110,11 +106,12 @@ export const handlePieceMove = (piece, pos) => {
       pos: null,
     });
   }
-
+  
   const currentPieces = getPiecesByColor(piece.color, updatedPieces);
+  const rivalPieces = getPiecesByColor(otherColor, updatedPieces);
 
   // If you are in check, you have to get out of check
-  if (($inCheck && (inCheck.color !== piece.color)) && isInCheck(currentKing, rivalPieces, updatedGrid)) {
+  if (isInCheck(currentKing, rivalPieces, updatedGrid)) {
     return;
   } else if ($inCheck && ($inCheck.color === piece.color)) {
     let kingEval = currentKing;
