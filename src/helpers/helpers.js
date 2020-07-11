@@ -130,7 +130,7 @@ export const isInCheck = (king, rivalPieces, grid) => {
   }, false);
 };
 
-export const isInCheckMate = (piece, pieces, grid) => {
+export const hasNotValidMovesOutoFCheck = (piece, pieces, grid) => {
   const gridClone = JSON.parse(JSON.stringify(grid));
   const otherColor = getOtherColor(piece.color);
   const currentPieces = getPiecesByColor(piece.color, pieces);

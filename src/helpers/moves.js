@@ -11,11 +11,11 @@ import {
 import {
   getGridAfterMove,
   getOtherColor,
+  getPiecesByColor,
   getPiecesObjectAfterMove,
   getPieceValidMoves,
-  getPiecesByColor,
+  hasNotValidMovesOutoFCheck,
   isInCheck,
-  isInCheckMate,
 } from './helpers';
 
 import {
@@ -23,7 +23,7 @@ import {
 } from '../helpers/validMoves';
 
 import {
-  handlePromote, handleCheckAndCheckMate,
+  handlePromote, handleCheckAndCheckMate, handleDraw,
 } from '../helpers/chessActions';
 
 export const handleCastling = (king, rook) => {
@@ -70,7 +70,7 @@ export const handleCastling = (king, rook) => {
   if (isInCheck(rivalKing, currentPieces, updatedGrid)) {
     inCheck.update(() => rivalKing);
 
-    if (isInCheckMate(king, updatedPieces, updatedGrid)) {
+    if (hasNotValidMovesOutoFCheck(king, updatedPieces, updatedGrid)) {
       winner.update(() => king.color);
       turn.update(() => null);
     }
@@ -132,7 +132,7 @@ export const handlePieceMove = (piece, pos) => {
   pieces.update(() => updatedPieces);
   grid.update(() => updatedGrid);
 
-
   handlePromote(piece, pos);
   handleCheckAndCheckMate(piece, currentPieces, rivalPieces, updatedPieces, updatedGrid);
+  handleDraw(piece, updatedPieces, updatedGrid);
 }

@@ -15,7 +15,7 @@ import {
 import {
   getOtherColor,
   isInCheck,
-  isInCheckMate,
+  hasNotValidMovesOutoFCheck,
   getPiecesObjectAfterMove,
   getGridAfterSwitchPieceProp,
   getPiecesByColor,
@@ -63,18 +63,29 @@ export const handlePromote = (piece, pos) => {
   }
 }
 
-export const handleCheckAndCheckMate = (piece, currentPieces, rivalPieces, updatedPieces, updatedGrid) => {
+export const handleCheckAndCheckMate = (piece, currentPieces, rivalPieces, pieces, grid) => {
   const currentKing = currentPieces.find((p) => p.name === 'king');
   const rivalKing = rivalPieces.find((p) => p.name === 'king');
 
-  if (isInCheck(rivalKing, currentPieces, updatedGrid)) {
+  if (isInCheck(rivalKing, currentPieces, grid)) {
     inCheck.update(() => rivalKing);
 
-    if (isInCheckMate(piece, updatedPieces, updatedGrid)) {
+    if (hasNotValidMovesOutoFCheck(piece, pieces, grid)) {
       winner.update(() => piece.color);
       turn.update(() => null);
     }
-  } else if (!isInCheck(currentKing, rivalPieces, updatedGrid)) {
+  } else if (!isInCheck(currentKing, rivalPieces, grid)) {
     inCheck.update(() => null);
+  }
+}
+
+export const handleDraw = (piece, pieces, grid) => {
+  const otherColor = getOtherColor(piece.color);
+  const rivalKing = pieces['king_' + otherColor];
+  const currentPieces = getPiecesByColor(piece.color, pieces);
+
+  if (!isInCheck(rivalKing, currentPieces, grid) && hasNotValidMovesOutoFCheck(piece, pieces, grid)) {
+    winner.update(() => 'draw');
+    turn.update(() => null);
   }
 }
