@@ -126,14 +126,13 @@ export const isInCheck = (king, rivalPieces, grid) => {
         validMoves = [];
     }
 
-    return !!validMoves.some(move => move.x === king.pos.x && move.y === king.pos.y) || prevVal;
+    return validMoves.some(move => move.x === king.pos.x && move.y === king.pos.y) || prevVal;
   }, false);
 };
 
 export const hasNotValidMovesOutoFCheck = (piece, pieces, grid) => {
   const gridClone = JSON.parse(JSON.stringify(grid));
   const otherColor = getOtherColor(piece.color);
-  const currentPieces = getPiecesByColor(piece.color, pieces);
   const rivalPieces = getPiecesByColor(otherColor, pieces);
   const rivalKing = pieces['king_' + otherColor];
 
@@ -142,6 +141,17 @@ export const hasNotValidMovesOutoFCheck = (piece, pieces, grid) => {
 
     for (let j = 0; j < validMoves.length; j++) {
       const updatedGrid = getGridAfterMove(gridClone, rivalPieces[i].pos, validMoves[j], rivalPieces[i]);
+      let currentPieces = getPiecesByColor(piece.color, pieces);
+
+      if (gridClone[validMoves[j].y][validMoves[j].x].piece
+          && gridClone[validMoves[j].y][validMoves[j].x].piece.color === piece.color) {
+        const eatedPiece = gridClone[validMoves[j].y][validMoves[j].x].piece;
+
+        currentPieces = currentPieces.filter((currentPiece) => {
+          return currentPiece.id !== eatedPiece.id
+        });
+      }
+
       let kingEval = rivalKing;
 
       if (rivalPieces[i].name === 'king') {
@@ -151,7 +161,7 @@ export const hasNotValidMovesOutoFCheck = (piece, pieces, grid) => {
         };
       }
 
-      if (!isInCheck(kingEval, currentPieces, updatedGrid)) {
+      if (!isInCheck(kingEval, currentPieces, updatedGrid, rivalPieces[i].id === 'pawn_8_black')) {
         return false;
       }
     }
