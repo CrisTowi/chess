@@ -1,3 +1,3 @@
 import io from 'socket.io-client';
 
-export const socket = io(process.env.CHESS_SERVER_URI);
+export const socket = io(CHESS_SERVER_URI);

@@ -51,10 +51,7 @@ export default {
 		production && terser(),
 
     replace({
-      // 2 level deep object should be stringify
-      process: JSON.stringify({
-        env: process.env,
-      }),
+			CHESS_SERVER_URI: process.env.CHESS_SERVER_URI,
     }),
 	],
 	watch: {
