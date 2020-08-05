@@ -7,7 +7,6 @@ export let column;
 export let onDropInside;
 export let piece;
 export let pos;
-export let reachable;
 export let row;
 export let inCheck;
 
