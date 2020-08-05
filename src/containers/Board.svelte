@@ -3,6 +3,8 @@ import {
   grid,
   pieces,
   inCheck,
+  gameType,
+  room,
 } from '../store/store';
 
 import {
@@ -10,9 +12,11 @@ import {
   handleCastling,
 } from '../helpers/moves';
 
+import { socket } from '../services/SocketIO';
+
 import Cell from '../components/Cell.svelte';
 
-const handleDropInside = (pieceId, pos) => {
+const handlePieceMoved = (pieceId, pos) => {
   const piece = Object.assign({}, $pieces[pieceId]);
   const posPiece = $grid[pos.y][pos.x].piece;
   let clearPath = false;
@@ -41,7 +45,20 @@ const handleDropInside = (pieceId, pos) => {
   } else {
     handlePieceMove(piece, pos);
   }
+}
+
+socket.on('chess-move', ({ move: { pieceId, pos } }) => {
+  handlePieceMoved(pieceId, pos);
+});
+
+const handleDropInside = (pieceId, pos) => {
+  if ($gameType === 'network') {
+    socket.emit('chess-move', { pieceId, pos });
+  } else {
+    handlePieceMoved(pieceId, pos);
+  }
 };
+
 </script>
 
 <style>

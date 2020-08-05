@@ -1,6 +1,7 @@
 <script>
 export let blackRemainObj;
 export let whiteRemainObj;
+export let myColor;
 </script>
 
 <style>
@@ -82,7 +83,14 @@ export let whiteRemainObj;
 
 <div class="AsideTimer">
   <div class="AsideTimer-color">
-    <p class="AsideTimer-Title">Black</p>
+    <p class="AsideTimer-Title">
+      {#if myColor && myColor === 'black'}
+        <span>
+          You >
+        </span>
+      {/if}
+      Black
+    </p>
     <p class="AsideTimer-Time">
       <span class="Min-label">{blackRemainObj.min}</span>
       <span class="Sec-label">{blackRemainObj.sec}</span>
@@ -90,7 +98,14 @@ export let whiteRemainObj;
     </p>
   </div>
   <div class="AsideTimer-color">
-    <p class="AsideTimer-Title">White</p>
+    <p class="AsideTimer-Title">
+      {#if myColor && myColor === 'white'}
+        <span>
+          You >
+        </span>
+      {/if}
+      White
+    </p>
     <p class="AsideTimer-Time">
       <span class="Min-label">{whiteRemainObj.min}</span>
       <span class="Sec-label">{whiteRemainObj.sec}</span>

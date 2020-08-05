@@ -1,10 +1,12 @@
 <script>
+import { socket } from '../services/SocketIO';
+
 import PieceIcon from '../components/PieceIcon.svelte';
 import PromotePiecesOptions from '../components/PromotePiecesOptions.svelte';
 import AsidePieces from '../components/AsidePieces.svelte';
 import AsideTimer from '../components/AsideTimer.svelte';
 
-import { turn, grid,  pieces, whiteRemaining, blackRemaining, toPromotePiece } from '../store/store';
+import { turn, grid,  pieces, whiteRemaining, blackRemaining, toPromotePiece, room, gameType } from '../store/store';
 import { getTimeObjFromMs, getOtherColor } from '../helpers/helpers';
 import { handlePromotePieceSelected } from '../helpers/chessActions';
 
@@ -54,6 +56,9 @@ whiteRemaining.subscribe(() => {
     color='black'
   />
   <AsideTimer
+    myColor={$gameType === 'network' && $room
+    ? $room.white === socket.id ? 'white' : 'black'
+    : null}
     blackRemainObj={blackRemainObj}
     whiteRemainObj={whiteRemainObj}
   />

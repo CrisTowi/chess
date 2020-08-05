@@ -3,7 +3,7 @@ export let onClick;
 </script>
 
 <style>
-.TimeSelect {
+.GameSelect {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,19 +11,19 @@ export let onClick;
   height: 100%;
 }
 
-.TimeSelect-instructions {
+.GameSelect-instructions {
   color: white;
   margin-bottom: 30px;
 }
 
-.TimeSelect-Selector {
+.GameSelect-Selector {
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
 }
 
-.TimeSelect-Option {
+.GameSelect-Option {
   height: 30px;
   width: 150px;
   color: white;
@@ -37,39 +37,36 @@ export let onClick;
   transition: transform 0.3s;
 }
 
-.TimeSelect-Option:hover {
+.GameSelect-Option:hover {
   transform: scale(1.05);
 }
 
 @media screen and (max-width: 768px) {
-  .TimeSelect-instructions {
+  .GameSelect-instructions {
     padding: 10px;
     text-align: center;
   }
 
-  .TimeSelect-Selector {
+  .GameSelect-Selector {
     flex-direction: column;
   }
 
-  .TimeSelect-Option {
+  .GameSelect-Option {
     margin-top: 20px;
   }
 }
 </style>
 
-<div class="TimeSelect">
-  <div class="TimeSelect-instructions">
-    <h2>Please select a time limit to start the game</h2>
+<div class="GameSelect">
+  <div class="GameSelect-instructions">
+    <h2>Type of game!</h2>
   </div>
-  <div class="TimeSelect-Selector">
-    <div on:click={() => onClick(10 * 60 * 1000)} class="TimeSelect-Option">
-      10 minutes
+  <div class="GameSelect-Selector">
+    <div on:click={() => onClick('local')} class="GameSelect-Option">
+      Local
     </div>
-    <div on:click={() => onClick(5 * 60 * 1000)} class="TimeSelect-Option">
-      5 minutes
-    </div>
-    <div on:click={() => onClick(3 * 60 * 1000)} class="TimeSelect-Option">
-      3 minutes
+    <div on:click={() => onClick('network')} class="GameSelect-Option">
+      Network
     </div>
   </div>
 </div>

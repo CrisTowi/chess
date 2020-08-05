@@ -1,10 +1,14 @@
 <script>
 import { onMount } from 'svelte';
+import { socket } from './services/SocketIO';
 import Board from './containers/Board.svelte';
 import Aside from './containers/Aside.svelte';
 import Modal from './containers/Modal.svelte';
 
 import TimeSelect from './components/TimeSelect.svelte';
+import GameSelect from './components/GameSelect.svelte';
+import ShareGame from './components/ShareGame.svelte';
+import Winner from './components/Winner.svelte';
 
 import {
 	blackRemaining,
@@ -19,6 +23,8 @@ import {
 	turn,
 	whiteRemaining,
 	winner,
+	gameType,
+	room,
 } from './store/store';
 
 import {
@@ -37,7 +43,7 @@ turn.subscribe(() => {
 						const toReturnValue = oldValue - 10;
 						if (toReturnValue === 0) {
 							winner.update(() => getOtherColor($turn));
-				      turn.update(() => null);
+							turn.update(() => null);
 						}
 	
 						return toReturnValue;
@@ -47,7 +53,7 @@ turn.subscribe(() => {
 						const toReturnValue = oldValue - 10;
 						if (toReturnValue === 0) {
 							winner.update(() => getOtherColor($turn));
-				      turn.update(() => null);
+							turn.update(() => null);
 						}
 	
 						return toReturnValue;
@@ -64,7 +70,7 @@ winner.subscribe((winnerValue) => {
 	}
 });
 
-const handleStartGame = (time) => {
+const handleStartGame = () => {
 	toPromotePiece.update(() => null);
 	inCheck.update(() => null);
 	pieces.update(() => PIECES);
@@ -72,8 +78,25 @@ const handleStartGame = (time) => {
 	started.update(() => true);
 	winner.update(() => null);
 	turn.update(() => 'white');
+};
+
+const handleStartRoom = (time) => {
+	socket.emit('start-room', { time });
+};
+
+const handleTimeSelect = (time) => {
 	whiteRemaining.update(() => time);
 	blackRemaining.update(() => time);
+
+	if ($gameType === 'local') {
+		handleStartGame();
+	} else {
+		handleStartRoom(time);
+	}
+};
+
+const handleGameSelect = (type) => {
+	gameType.update(() => type);
 };
 
 </script>
@@ -153,7 +176,18 @@ const handleStartGame = (time) => {
 
 <div class="App">
 	<Modal visible={!$started || $winner}>
-		<TimeSelect winner={$winner} onClick={handleStartGame} />
+		{#if $winner}
+			<Winner winner={$winner} />
+		{/if}
+		{#if !$winner && !$gameType}
+			<GameSelect onClick={handleGameSelect} />
+		{/if}
+		{#if !$winner && $gameType && !$whiteRemaining && !$blackRemaining}
+			<TimeSelect onClick={handleTimeSelect} />
+		{/if}
+		{#if !$winner && $gameType && $whiteRemaining && $blackRemaining}
+			<ShareGame url={$room ? `${window.location.origin}?room=${$room._id}` : ''} />
+		{/if}
 	</Modal>
 	<div class="square">
 		<div class="Board-container">

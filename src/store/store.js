@@ -48,3 +48,5 @@ export const timerInterval = writable(null);
 export const toPromotePiece = writable(null);
 export const inCheck = writable(null);
 export const winner = writable(null);
+export const gameType = writable(null);
+export const room = writable(null);
