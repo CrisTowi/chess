@@ -51,7 +51,7 @@ export default {
 		production && terser(),
 
     replace({
-			CHESS_SERVER_URI: process.env.CHESS_SERVER_URI,
+			CHESS_SERVER_URI: JSON.stringify(process.env.CHESS_SERVER_URI),
     }),
 	],
 	watch: {
